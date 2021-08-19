@@ -25,7 +25,32 @@ public class HoneywellPlugin extends CommonPlugin {
     public HoneywellPlugin() {
         super(LOG_TAG);
     }
+    private void InitilizeBarcodeReader(boolean throwError){
+        try{
+            this.barcodeListener = new BarcodeListener();
+            this.barcodeDeviceListener = new BarcodeDeviceListener();
+            this.barcodeReaderManager = new BarcodeReaderManager();
 
+            AidcManager.create(this.cordova.getActivity(), new CreatedCallback() {
+
+                @Override
+                public void onCreated(AidcManager aidcManager) {
+
+                    CordovaPluginLog.d(LOG_TAG, "AidcManager created");
+                    HoneywellPlugin.this.aidcManager = aidcManager;
+
+                    // register barcode device listener
+                    HoneywellPlugin.this.aidcManager.addBarcodeDeviceListener(HoneywellPlugin.this.barcodeDeviceListener);
+                }
+            });
+        }
+        catch(Exception e){
+            CordovaPluginLog.e(LOG_TAG, e.getMessage(), e);
+            if(throwError)
+                throw e;
+        }
+        
+    }
     /**
      * Called after plugin construction and fields have been initialized.
      */
@@ -33,22 +58,7 @@ public class HoneywellPlugin extends CommonPlugin {
     public void pluginInitialize() {
         super.pluginInitialize();
 
-        this.barcodeListener = new BarcodeListener();
-        this.barcodeDeviceListener = new BarcodeDeviceListener();
-        this.barcodeReaderManager = new BarcodeReaderManager();
-
-        AidcManager.create(this.cordova.getActivity(), new CreatedCallback() {
-
-            @Override
-            public void onCreated(AidcManager aidcManager) {
-
-                CordovaPluginLog.d(LOG_TAG, "AidcManager created");
-                HoneywellPlugin.this.aidcManager = aidcManager;
-
-                // register barcode device listener
-                HoneywellPlugin.this.aidcManager.addBarcodeDeviceListener(HoneywellPlugin.this.barcodeDeviceListener);
-            }
-        });
+        InitilizeBarcodeReader(true);
     }
 
     /**
@@ -67,6 +77,10 @@ public class HoneywellPlugin extends CommonPlugin {
                 barcodeReaderManager.getInstance().claim();
             } catch (ScannerUnavailableException e) {
                 CordovaPluginLog.e(LOG_TAG, e.getMessage(), e);
+            } catch (Exception exp){
+                CordovaPluginLog.e(LOG_TAG, e.getMessage(), e);
+                CordovaPluginLog.d(LOG_TAG, "Error on Resume.  Attempting to ReInit");
+                InitilizeBarcodeReader(false);
             }
         }
     }
