@@ -78,7 +78,7 @@ public class HoneywellPlugin extends CommonPlugin {
             } catch (ScannerUnavailableException e) {
                 CordovaPluginLog.e(LOG_TAG, e.getMessage(), e);
             } catch (Exception exp){
-                CordovaPluginLog.e(LOG_TAG, e.getMessage(), e);
+                CordovaPluginLog.e(LOG_TAG, exp.getMessage(), exp);
                 CordovaPluginLog.d(LOG_TAG, "Error on Resume.  Attempting to ReInit");
                 InitilizeBarcodeReader(false);
             }
