@@ -4,7 +4,7 @@
     "description": "Honeywell Plugin",
     "repository": {
       "type": "git",
-      "url": "https://github.com/dff-solutions/dff-cordova-plugin-honeywell.git"
+      "url": "https://github.com/TheItJedi/dff-cordova-plugin-honeywell.git"
     },
     "keywords": [
         "phonegap",
