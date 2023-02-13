@@ -10,7 +10,7 @@
         <clobbers target="Honeywell"/>
     </js-module>
 
-    <dependency id="dff-cordova-plugin-common" url="https://github.com/dff-solutions/dff.CordovaPlugin.Common.git"/>
+    <dependency id="dff-cordova-plugin-common" url="https://github.com/TheItJedi/dff.CordovaPlugin.Common.git"/>
 
     <!-- android -->
     <platform name="android">
